@@ -4,7 +4,7 @@ from django.urls import path
 from django.shortcuts import render
 
 
-existing_tasks = ["default values"]
+existing_tasks = []
 completed_tasks = []
 
 
@@ -30,24 +30,26 @@ def add_task_view(request):
 
 
 def delete_task_view(request, index):
-    origin = request.headers.get("Referer").split("/")[-2]
+    # origin = request.headers.get("Referer").split("/")[-2]
     del existing_tasks[index - 1]
-    return HttpResponseRedirect(f"/{origin}/")
+    return HttpResponseRedirect("/tasks/")
+    # return HttpResponseRedirect(f"/{origin}/")
 
 
 def complete_task_view(request, index):
-    origin = request.headers.get("Referer").split("/")[-2]
+    # origin = request.headers.get("Referer").split("/")[-2]
     completed = existing_tasks.pop(index - 1)
     completed_tasks.append(completed)
-    return HttpResponseRedirect(f"/{origin}/")
+    return HttpResponseRedirect("/tasks/")
+    # return HttpResponseRedirect(f"/{origin}/")
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("tasks/", index),
     path("add-task/", add_task_view),
-    path("delete-task/<int:index>", delete_task_view),
-    path("complete_task/<int:index>", complete_task_view),
+    path("delete-task/<int:index>/", delete_task_view),
+    path("complete_task/<int:index>/", complete_task_view),
     path("completed_tasks/", completed_task_view),
     path("all_tasks/", all_tasks_view),
 ]
